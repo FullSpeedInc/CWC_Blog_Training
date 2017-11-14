@@ -29,7 +29,10 @@ class UserController extends Controller
     public function index()
     {
         $formData = array();
-        $formData['users'] = User::all(['id', 'first_name as firstname', 'last_name as lastname', 'username']);
+        $formData['users'] = User::select(['id', 'first_name as firstname', 'last_name as lastname', 'username'])
+                                ->orderBy('firstname')
+                                ->paginate(5);
+
         $formData['viewUserStore'] = false;
 
         if (Auth::user()->role == 1) {

@@ -46,18 +46,10 @@
                 </div>
             </div>
             <div class="row">
-                    <div class="col offset-md-7">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+                <div class="col-2 offset-md-10">
+                    <nav>{{$users->links()}}</nav>
                 </div>
+            </div>
         </div>
         @if ($viewUserStore)
                 <div class="col-2 align-self-end">
