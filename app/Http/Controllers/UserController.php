@@ -11,6 +11,7 @@ use App\User;
 use Auth;
 use Exception;
 use Hash;
+use Response;
 use View;
 
 class UserController extends Controller
@@ -27,13 +28,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $form_data = array();
+        $formData = array();
+        $formData['users'] = User::all(['id', 'first_name as firstname', 'last_name as lastname', 'username']);
 
         if (Auth::user()->role == 1) {
-            $form_data['viewUserStore'] = true;
+            $formData['viewUserStore'] = true;
         }
 
-        return View::make('user.list', $form_data);
+        return View::make('user.list', $formData);
     }
 
 
@@ -52,8 +54,19 @@ class UserController extends Controller
             $User->save();
 
             return redirect()->route('user.list')->with(['message' => 'User added.']);
-        } catch ( Excception $e) {
+        } catch (Excception $e) {
             return redirect()->route('user.list')->withErrors($e);
+        }
+    }
+
+    public function destroy(Request $request)
+    {
+        try{
+            User::destroy($request->id);
+
+            return Response::json(['success' => true, 'message' => 'User deleted.']);
+        } catch(Exception $e) {
+            return Response::json(['success' => false, 'message' => $e]);
         }
     }
 }

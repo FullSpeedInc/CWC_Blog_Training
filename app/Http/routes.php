@@ -16,6 +16,10 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'user'], function () {
+    Route::post('delete', [
+        'as' => 'user.delete',
+        'uses' => 'UserController@destroy'
+    ]);
     Route::post('login', [
         'as' => 'login',
         'uses' => 'UserController@login'
