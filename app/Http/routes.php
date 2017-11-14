@@ -20,6 +20,10 @@ Route::group(['prefix' => 'user'], function () {
         'as' => 'user.delete',
         'uses' => 'UserController@destroy'
     ]);
+    Route::post('detail', [
+        'as' => 'user.get',
+        'uses' => 'UserController@get'
+    ]);
     Route::post('login', [
         'as' => 'login',
         'uses' => 'UserController@login'
@@ -31,5 +35,8 @@ Route::group(['prefix' => 'user'], function () {
     ]);
     Route::post('store', [
         'as' => 'user.store', 'uses' => 'UserController@store'
+    ]);
+    Route::post('update', [
+        'as' => 'user.update', 'uses' => 'UserController@update'
     ]);
 });

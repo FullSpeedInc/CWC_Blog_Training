@@ -38,8 +38,6 @@ class UserController extends Controller
         return View::make('user.list', $formData);
     }
 
-
-
     public function store(Requests\StoreUserRequest $request)
     {
         try {
@@ -48,12 +46,12 @@ class UserController extends Controller
             $User->first_name = $request->firstname;
             $User->last_name = $request->lastname;
             $User->password = Hash::make($request->password);
-            $User->username = $request->username;
             $User->role = $request->role;
+            $User->username = $request->username;
 
             $User->save();
 
-            return redirect()->route('user.list')->with(['message' => 'User added.']);
+            return redirect()->route('user.list')->with(['userAddMessage' => true, 'message' => 'User added.']);
         } catch (Excception $e) {
             return redirect()->route('user.list')->withErrors($e);
         }
@@ -68,5 +66,26 @@ class UserController extends Controller
         } catch(Exception $e) {
             return Response::json(['success' => false, 'message' => $e]);
         }
+    }
+
+    public function update(Requests\UpdateUserRequest $request)
+    {
+        $user = User::find($request->id);
+
+        $user->first_name = $request->firstname;
+        $user->last_name = $request->lastname;
+        $user->role = $request->role;
+        $user->username = $request->username;
+
+        $user->save();
+
+        return redirect()->route('user.list')->with(['userListMessage' => true, 'message' => 'User updated.']);
+    }
+
+    public function get(Request $request)
+    {
+        $user = User::find($request->id);
+
+        return Response::json(['success' => true, 'message' => 'User detail retrieved.', 'user' => $user]);
     }
 }
