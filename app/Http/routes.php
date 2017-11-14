@@ -25,4 +25,7 @@ Route::group(['prefix' => 'user'], function () {
         'uses' => 'UserController@index',
         'middleware' => 'auth'
     ]);
+    Route::post('store', [
+        'as' => 'user.store', 'uses' => 'UserController@store'
+    ]);
 });
