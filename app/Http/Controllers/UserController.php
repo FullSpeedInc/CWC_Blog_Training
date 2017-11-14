@@ -30,6 +30,7 @@ class UserController extends Controller
     {
         $formData = array();
         $formData['users'] = User::all(['id', 'first_name as firstname', 'last_name as lastname', 'username']);
+        $formData['viewUserStore'] = false;
 
         if (Auth::user()->role == 1) {
             $formData['viewUserStore'] = true;
