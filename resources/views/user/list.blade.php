@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Laravel</title>
-    <script type="text/javascript" src="{{ asset('jquery-3.2.1.min.js') }}"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-</head>
-<body>
-<div class="container">
-    <div class="content">
-        <div class="row">
-            <div class="col-2">
-                MENU HERE
-            </div>
-            <div class="col-8">
+@extends("layout/master")
+@section('sitetitle', 'User ')
+@section("content")
+    <div class="row">
+            <div class="col-10">
                 <div class="row">
                     <div class="offset-md-1 col-10">
                         <div id="notificationUserSuccess" class="alert alert-success" style="display:none;"></div>
@@ -107,11 +95,7 @@
                 </div>
             @endif
         </div>
-    </div>
-</div>
-</body>
-</html>
-<script>
+    <script>
     $(document).ready(function(){
         const btns = {
             'delete' : $('.btnDelete')
@@ -150,3 +134,4 @@
         })
     })
 </script>
+@stop
