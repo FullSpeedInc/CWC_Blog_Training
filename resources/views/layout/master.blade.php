@@ -8,9 +8,7 @@
     @if (strpos(Request::path(),'/') === 0 ||strpos(Request::path(),'login') === 0 ||
           strpos(Request::path(),'logout') === 0)
     @else
-        <header>
-            @include("layout.nav")
-        </header>
+        @include("layout.nav")
     @endif
 
     <main class="valign-wrapper">
