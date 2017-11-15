@@ -17,20 +17,20 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'user'], function () {
     Route::post('delete', [
-        'as' => 'user.delete',
+        'as'   => 'user.delete',
         'uses' => 'UserController@destroy'
     ]);
     Route::post('detail', [
-        'as' => 'user.get',
+        'as'   => 'user.get',
         'uses' => 'UserController@get'
     ]);
     Route::post('login', [
-        'as' => 'login',
+        'as'   => 'login',
         'uses' => 'UserController@login'
     ]);
     Route::get('list', [
-        'as' => 'user.list',
-        'uses' => 'UserController@index',
+        'as'         => 'user.list',
+        'uses'       => 'UserController@index',
         'middleware' => 'auth'
     ]);
     Route::post('store', [

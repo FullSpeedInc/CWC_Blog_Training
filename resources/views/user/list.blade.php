@@ -52,47 +52,47 @@
             </div>
         </div>
         @if ($viewUserStore)
-                <div class="col-2 align-self-end">
-                    <form action="{{route('user.store')}}" method="POST">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <div class="col-2 align-self-end">
+                <form action="{{route('user.store')}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                        <h5>Add User</h5>
+                    <h5>Add User</h5>
 
-                        @if(session()->has('errors'))
-                            <div class="alert alert-danger">{{ session()->get('errors')->first() }}</div>
-                        @elseif(session()->get('userAddMessage') && session()->has('message'))
-                            <div class="alert alert-success">
-                                {{ session()->get('message') }}
-                            </div>
-                        @endif
+                    @if(session()->has('errors'))
+                        <div class="alert alert-danger">{{ session()->get('errors')->first() }}</div>
+                    @elseif(session()->get('userAddMessage') && session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
 
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" name="username" class="form-control" placeholder="Enter username." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastname">Last Name</label>
-                            <input type="text" name="lastname" class="form-control" placeholder="Enter last name." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="firstname">First Name</label>
-                            <input type="text" name="firstname" class="form-control" placeholder="Enter first name." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="role">Role</label>
-                            <select class="form-control" name="role">
-                                <option value="0" selected>User</option>
-                                <option value="1">Admin</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Enter password." required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            @endif
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="Enter username." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" name="lastname" class="form-control" placeholder="Enter last name." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstname">First Name</label>
+                        <input type="text" name="firstname" class="form-control" placeholder="Enter first name." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" name="role">
+                            <option value="0" selected>User</option>
+                            <option value="1">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter password." required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        @endif
         @if($user)
             <div class="modal fade" id="modalUserEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -137,71 +137,67 @@
         @endif
     </div>
     <script>
-    $(document).ready(function(){
-        const btns = {
-            'delete' : $('.btnUserDelete')
-        }
-        const notifications = {
-            'user' : {
-                'success' : $('#notificationUserSuccess'),
-                'danger'  : $('#notificationUserDanger')
+        $(document).ready(function(){
+            const notifications = {
+                'user' : {
+                    'success' : $('#notificationUserSuccess'),
+                    'danger'  : $('#notificationUserDanger')
+                }
             }
-        }
-        let userDelete = (id = null) => {
-            $.ajax({
-                url: '{{route("user.delete")}}',
-                data : {
-                    'id': id,
-                    '_token': '{{ csrf_token() }}',
-                },
-                method: 'POST',
-                success: function(data){
-                    if (data.success) {
-                        notifications.user.success.css('display', 'block')
-                        notifications.user.success.html(data.message)
-                        $('#tblUser #' + id).closest('tr').remove()
+            let userDelete = (id = null) => {
+                $.ajax({
+                    url: '{{route("user.delete")}}',
+                    data : {
+                        'id': id,
+                        '_token': '{{ csrf_token() }}',
+                    },
+                    method: 'POST',
+                    success: function(data){
+                        if (data.success) {
+                            notifications.user.success.css('display', 'block')
+                            notifications.user.success.html(data.message)
+                            $('#tblUser #' + id).closest('tr').remove()
+                        }
+                    },
+                    error: function(){
+                        notifications.user.danger.css('display', 'block')
+                        notifications.user.danger.html(data.message)
                     }
-                },
-                error: function(){
-                    notifications.user.danger.css('display', 'block')
-                    notifications.user.danger.html(data.message)
-                }
+                })
+            }
+
+            $('table').on('click', '.btnUserDelete', function(){
+                userDelete($(this).attr('id'))
             })
-        }
 
-        $('table').on('click', '.btnUserDelete', function(){
-            userDelete($(this).attr('id'))
-        })
+            $('#modalUserEdit').on('show.bs.modal', function (event) {
+              var button = $(event.relatedTarget)
+              var id = button.data('id')
+              var modal = $(this)
 
-        $('#modalUserEdit').on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget)
-          var id = button.data('id')
-          var modal = $(this)
-
-          $.ajax({
-                url: '{{route("user.get")}}',
-                data : {
-                    'id' : id,
-                    '_token' : '{{ csrf_token() }}',
-                },
-                method: 'POST',
-                success: function(data){
-                    if(data.success){
-                        modal.find('#modalUserLabel').append(': ' + data.user.username)
-                        modal.find('[name="id"]').val(id)
-                        modal.find('[name="username"]').val(data.user.username)
-                        modal.find('[name="lastname"]').val(data.user.last_name)
-                        modal.find('[name="firstname"]').val(data.user.first_name)
-                        modal.find('[name="role"]').val(data.user.role)
+              $.ajax({
+                    url: '{{route("user.get")}}',
+                    data : {
+                        'id' : id,
+                        '_token' : '{{ csrf_token() }}',
+                    },
+                    method: 'POST',
+                    success: function(data){
+                        if(data.success){
+                            modal.find('#modalUserLabel').append(': ' + data.user.username)
+                            modal.find('[name="id"]').val(id)
+                            modal.find('[name="username"]').val(data.user.username)
+                            modal.find('[name="lastname"]').val(data.user.last_name)
+                            modal.find('[name="firstname"]').val(data.user.first_name)
+                            modal.find('[name="role"]').val(data.user.role)
+                        }
+                    },
+                    error: function(){
+                        notifications.user.danger.css('display', 'block')
+                        notifications.user.danger.html(data.message)
                     }
-                },
-                error: function(){
-                    notifications.user.danger.css('display', 'block')
-                    notifications.user.danger.html(data.message)
-                }
+                })
             })
         })
-
-    })
-</script>
+    </script>
 @stop
