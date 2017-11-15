@@ -15,6 +15,14 @@ Route::get('/', function () {
     return view('user/login');
 });
 
+Route::group(['prefix' => 'article'], function () {
+    Route::get('list', [
+        'as'         => 'article.list',
+        'uses'       => 'ArticleController@index',
+        'middleware' => 'auth'
+    ]);
+});
+
 Route::group(['prefix' => 'user'], function () {
     Route::post('delete', [
         'as'   => 'user.delete',

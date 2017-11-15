@@ -10,7 +10,7 @@
                 <a class="nav-link" href="{{route('user.list')}}">User Management<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Article Management</a>
+                <a class="nav-link" href="{{route('article.list')}}">Article Management</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{route('category.list')}}">Category Management</a>

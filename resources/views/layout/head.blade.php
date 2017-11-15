@@ -1,4 +1,6 @@
 <script type="text/javascript" src="{{ asset('jquery-3.2.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('ckeditor-4.7.3.js') }}"></script>
+<script type="text/javascript" src="{{ asset('ckfinder-3.4.1.js') }}"></script>
 
 <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
