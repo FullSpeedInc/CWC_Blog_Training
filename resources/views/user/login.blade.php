@@ -7,8 +7,8 @@
             <form action="{{route('login')}}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                @if($errors->any())
-                    <em style="color:red">{{$errors->first()}}</em>
+                @if(session()->has('errors'))
+                   <em style="color:red">{{ session()->get('errors')->first() }}</em>
                 @endif
                 <div class="form-group">
                     <label for="username">Username</label>

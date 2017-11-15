@@ -8,8 +8,8 @@
                     <div id="notificationUserSuccess" class="alert alert-success" style="display:none;"></div>
                     <div id="notificationUserDanger" class="alert alert-danger" style="display:none;"></div>
 
-                    @if($errors->any())
-                        <div class="alert alert-danger">{{$errors->first()}}</div>
+                    @if(session()->has('errors'))
+                        <div class="alert alert-danger">{{ session()->get('errors')->first() }}</div>
                     @elseif(session()->get('userListMessage') && session()->has('message'))
                         <div class="alert alert-success">
                             {{ session()->get('message') }}
@@ -58,8 +58,8 @@
 
                         <h5>Add User</h5>
 
-                        @if($errors->any())
-                            <div class="alert alert-danger">{{$errors->first()}}</div>
+                        @if(session()->has('errors'))
+                            <div class="alert alert-danger">{{ session()->get('errors')->first() }}</div>
                         @elseif(session()->get('userAddMessage') && session()->has('message'))
                             <div class="alert alert-success">
                                 {{ session()->get('message') }}
