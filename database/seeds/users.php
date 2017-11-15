@@ -13,18 +13,18 @@ class users extends Seeder
     {
         $users = [
             0 => [
-                'username' => 'admin',
+                'username'   => 'admin',
                 'first_name' => 'admin firstname',
-                'last_name' => 'admin lastname',
-                'role'  => 1,
-                'password' => Hash::make('password'),
+                'last_name'  => 'admin lastname',
+                'role'       => 1,
+                'password'   => Hash::make('password'),
             ],
             1 => [
-                'username' => 'user',
+                'username'   => 'user',
                 'first_name' => 'user firstname',
-                'last_name' => 'user lastname',
-                'role'  => 0,
-                'password' => Hash::make('password'),
+                'last_name'  => 'user lastname',
+                'role'       => 0,
+                'password'   => Hash::make('password'),
             ]
         ];
 
