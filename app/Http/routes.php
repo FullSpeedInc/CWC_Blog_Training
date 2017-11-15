@@ -40,3 +40,18 @@ Route::group(['prefix' => 'user'], function () {
         'as' => 'user.update', 'uses' => 'UserController@update'
     ]);
 });
+
+Route::group(['prefix' => 'category'], function () {
+    Route::post('delete', [
+        'as'   => 'category.delete',
+        'uses' => 'CategoryController@destroy'
+    ]);
+    Route::get('list', [
+        'as'         => 'category.list',
+        'uses'       => 'CategoryController@index',
+        'middleware' => 'auth'
+    ]);
+    Route::post('store', [
+        'as' => 'category.store', 'uses' => 'CategoryController@store'
+    ]);
+});

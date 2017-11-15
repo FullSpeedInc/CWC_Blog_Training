@@ -13,7 +13,7 @@
                 <a class="nav-link" href="#">Article Management</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Category Management</a>
+                <a class="nav-link" href="{{route('category.list')}}">Category Management</a>
             </li>
         </ul>
     </div>
