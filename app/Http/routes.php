@@ -25,6 +25,11 @@ Route::group(['prefix' => 'article'], function () {
         'as'   => 'article.delete',
         'uses' => 'ArticleController@destroy'
     ]);
+    Route::get('edit/{id}', [
+        'as'         => 'article.edit',
+        'uses'       => 'ArticleController@edit',
+        'middleware' => 'auth'
+    ]);
     Route::get('list', [
         'as'         => 'article.list',
         'uses'       => 'ArticleController@index',
@@ -33,6 +38,10 @@ Route::group(['prefix' => 'article'], function () {
     Route::post('store', [
         'as'         => 'article.store',
         'uses'       => 'ArticleController@store'
+    ]);
+    Route::post('update', [
+        'as'         => 'article.update',
+        'uses'       => 'ArticleController@update'
     ]);
 });
 

@@ -37,6 +37,7 @@
                                     <td>{{$article->slug}}</td>
                                     <td>{{$article->username}}</td>
                                     <td>
+                                        <a href="{{route('article.edit', $article->article_id)}}">Edit</a>
                                         <button type="button" class="btn btn-danger btn-sm btnArticleDelete" id="{{$article->article_id}}">Delete</button>
                                     </td>
                                 </tr>

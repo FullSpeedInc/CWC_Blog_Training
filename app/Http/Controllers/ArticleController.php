@@ -49,6 +49,16 @@ class ArticleController extends Controller
         }
     }
 
+    public function edit($id = null)
+    {
+        $formData               = [];
+        $formData['article']    = Article::find($id);
+        $formData['categories'] = Category::all(['id', 'name as value']);
+
+        return View::make('article.edit', $formData);
+
+    }
+
     public function store(Request $request)
     {
         try{
@@ -63,6 +73,24 @@ class ArticleController extends Controller
             $Article->save();
 
             return redirect()->route('article.list')->with(['articleAddMessage' => true, 'message' => 'Article added.']);
+        } catch (Exception $e) {
+            return redirect()->route('article.list')->withErrors($e);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try{
+            $Article = Article::find($request->id);
+
+            $Article->title                = $request->title;
+            $Article->slug                 = $request->slug;
+            $Article->article_category_id  = $request->category;
+            $Article->contents             = $request->editor;
+
+            $Article->save();
+
+            return redirect()->route('article.list')->with(['articleAddMessage' => true, 'message' => 'Article updated.']);
         } catch (Exception $e) {
             return redirect()->route('article.list')->withErrors($e);
         }
