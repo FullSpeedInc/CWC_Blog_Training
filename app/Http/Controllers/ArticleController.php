@@ -64,11 +64,12 @@ class ArticleController extends Controller
         try{
             $Article = new Article;
 
-            $Article->title                = $request->title;
-            $Article->slug                 = $request->slug;
             $Article->article_category_id  = $request->category;
-            $Article->updated_user_id      = Auth::user()->id;
             $Article->contents             = $request->editor;
+            $Article->image_path           = ($request->imgInput? $request->imgInput : null);
+            $Article->slug                 = $request->slug;
+            $Article->title                = $request->title;
+            $Article->updated_user_id      = Auth::user()->id;
 
             $Article->save();
 
@@ -83,10 +84,11 @@ class ArticleController extends Controller
         try{
             $Article = Article::find($request->id);
 
-            $Article->title                = $request->title;
-            $Article->slug                 = $request->slug;
             $Article->article_category_id  = $request->category;
             $Article->contents             = $request->editor;
+            $Article->image_path           = ($request->imgInput? $request->imgInput : null);
+            $Article->slug                 = $request->slug;
+            $Article->title                = $request->title;
 
             $Article->save();
 

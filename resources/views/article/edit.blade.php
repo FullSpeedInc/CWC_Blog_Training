@@ -23,15 +23,13 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="img">Attach Image</label>
-                    <input type="file" class="form-control-file" id="img" aria-describedby="imgHelp">
-                    <small id="imgHelp" class="form-text text-muted">Image for article.</small>
-                </div>
 
                 <div class="form-group">
                     <textarea name="editor">{{$article->contents}}</textarea>
                 </div>
+
+                <input name="imgInput" type="text" style="width:60%">
+                <button type="button" name="imgUpload" class="btn btn-primary" style="float: left">Choose Image</button>
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>
@@ -40,9 +38,27 @@
         $(document).ready(function(){
             //For the CKEditor
             var editor = ClassicEditor.create( document.querySelector( '[name=editor]' ) )
-                .then( editor => { console.log( editor );
-        }).catch( error => { console.error( error );
-        })
+                                      .then( editor => { console.log( editor );
+                                      }).catch( error => { console.error( error );
+                                      })
+
+            $('[name=imgUpload]').click( () => {
+                CKFinder.modal( {
+                    chooseFiles: true,
+                    width: 800,
+                    height: 600,
+                    onInit: function( finder ) {
+                        finder.on( 'files:choose', function( evt ) {
+                            var file = evt.data.files.first();
+                            $('[name=imgInput]').val(file.getUrl());
+                        } );
+
+                        finder.on( 'file:choose:resizedImage', function( evt ) {
+                            $('[name=imgInput]').val(evt.data.resizedUrl);
+                        } );
+                    }
+                });
+            });
         })
     </script>
 @stop
