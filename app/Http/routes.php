@@ -16,10 +16,23 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'article'], function () {
+    Route::get('create', [
+        'as'         => 'article.create',
+        'uses'       => 'ArticleController@create',
+        'middleware' => 'auth'
+    ]);
+    Route::post('delete', [
+        'as'   => 'article.delete',
+        'uses' => 'ArticleController@destroy'
+    ]);
     Route::get('list', [
         'as'         => 'article.list',
         'uses'       => 'ArticleController@index',
         'middleware' => 'auth'
+    ]);
+    Route::post('store', [
+        'as'         => 'article.store',
+        'uses'       => 'ArticleController@store'
     ]);
 });
 

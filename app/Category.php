@@ -12,5 +12,6 @@ class Category extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
+    protected $primaryKey = 'id';
     protected $table = 'article_category';
 }

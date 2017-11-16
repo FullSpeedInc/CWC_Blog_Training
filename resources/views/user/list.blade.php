@@ -136,68 +136,68 @@
             </div>
         @endif
     </div>
-    <script>
-        $(document).ready(function(){
-            const notifications = {
-                'user' : {
-                    'success' : $('#notificationUserSuccess'),
-                    'danger'  : $('#notificationUserDanger')
+<script>
+    $(document).ready(function(){
+        const notifications = {
+            'user' : {
+                'success' : $('#notificationUserSuccess'),
+                'danger'  : $('#notificationUserDanger')
+            }
+        }
+        let userDelete = (id = null) => {
+            $.ajax({
+                url: '{{route("user.delete")}}',
+                data : {
+                    'id': id,
+                    '_token': '{{ csrf_token() }}',
+                },
+                method: 'POST',
+                success: function(data){
+                    if (data.success) {
+                        notifications.user.success.css('display', 'block')
+                        notifications.user.success.html(data.message)
+                        $('#tblUser #' + id).closest('tr').remove()
+                    }
+                },
+                error: function(){
+                    notifications.user.danger.css('display', 'block')
+                    notifications.user.danger.html(data.message)
                 }
-            }
-            let userDelete = (id = null) => {
-                $.ajax({
-                    url: '{{route("user.delete")}}',
-                    data : {
-                        'id': id,
-                        '_token': '{{ csrf_token() }}',
-                    },
-                    method: 'POST',
-                    success: function(data){
-                        if (data.success) {
-                            notifications.user.success.css('display', 'block')
-                            notifications.user.success.html(data.message)
-                            $('#tblUser #' + id).closest('tr').remove()
-                        }
-                    },
-                    error: function(){
-                        notifications.user.danger.css('display', 'block')
-                        notifications.user.danger.html(data.message)
-                    }
-                })
-            }
-
-            $('table').on('click', '.btnUserDelete', function(){
-                userDelete($(this).attr('id'))
             })
+        }
 
-            $('#modalUserEdit').on('show.bs.modal', function (event) {
-              var button = $(event.relatedTarget)
-              var id = button.data('id')
-              var modal = $(this)
+        $('table').on('click', '.btnUserDelete', function(){
+            userDelete($(this).attr('id'))
+        })
 
-              $.ajax({
-                    url: '{{route("user.get")}}',
-                    data : {
-                        'id' : id,
-                        '_token' : '{{ csrf_token() }}',
-                    },
-                    method: 'POST',
-                    success: function(data){
-                        if(data.success){
-                            modal.find('#modalUserLabel').append(': ' + data.user.username)
-                            modal.find('[name="id"]').val(id)
-                            modal.find('[name="username"]').val(data.user.username)
-                            modal.find('[name="lastname"]').val(data.user.last_name)
-                            modal.find('[name="firstname"]').val(data.user.first_name)
-                            modal.find('[name="role"]').val(data.user.role)
-                        }
-                    },
-                    error: function(){
-                        notifications.user.danger.css('display', 'block')
-                        notifications.user.danger.html(data.message)
+        $('#modalUserEdit').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget)
+          var id = button.data('id')
+          var modal = $(this)
+
+          $.ajax({
+                url: '{{route("user.get")}}',
+                data : {
+                    'id' : id,
+                    '_token' : '{{ csrf_token() }}',
+                },
+                method: 'POST',
+                success: function(data){
+                    if(data.success){
+                        modal.find('#modalUserLabel').append(': ' + data.user.username)
+                        modal.find('[name="id"]').val(id)
+                        modal.find('[name="username"]').val(data.user.username)
+                        modal.find('[name="lastname"]').val(data.user.last_name)
+                        modal.find('[name="firstname"]').val(data.user.first_name)
+                        modal.find('[name="role"]').val(data.user.role)
                     }
-                })
+                },
+                error: function(){
+                    notifications.user.danger.css('display', 'block')
+                    notifications.user.danger.html(data.message)
+                }
             })
         })
-    </script>
+    })
+</script>
 @stop

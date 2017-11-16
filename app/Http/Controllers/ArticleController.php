@@ -2,23 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
 //additional includes
 use App\Article;
+use App\User;
+use Auth;
+use Response;
 use View;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $formData             = [];
-        $formData['articles'] = Article::select(['id', 'name'])
-                                        ->orderBy('name')
-                                        ->paginate(5);
+        $formData                  = [];
+        $user                      = new User;
+        $formData['currentPage']   = ($request->page? $request->page: 1);
+        $paginatorLenght           = 5;
+        $articles                  = $user->getArticles();
+        $articleSize               = sizeof($articles);
+        $formData['articles']      = $articles->forPage($formData['currentPage'], $paginatorLenght);
+        $formData['paginatorLast'] = ceil($articleSize/$paginatorLenght);
 
         return View::make('article.list', $formData);
+    }
+
+    public function create()
+    {
+        $formData['categories'] = Category::all(['id', 'name as value']);
+
+        return View::make('article.create', $formData);
+
+    }
+
+    public function destroy(Request $request)
+    {
+        try{
+            Article::destroy($request->id);
+
+            return Response::json(['success' => true, 'message' => 'Article deleted.']);
+        } catch(Exception $e) {
+            return Response::json(['success' => false, 'message' => $e]);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try{
+            $Article = new Article;
+
+            $Article->title                = $request->title;
+            $Article->slug                 = $request->slug;
+            $Article->article_category_id  = $request->category;
+            $Article->updated_user_id      = Auth::user()->id;
+            $Article->contents             = $request->editor;
+
+            $Article->save();
+
+            return redirect()->route('article.list')->with(['articleAddMessage' => true, 'message' => 'Article added.']);
+        } catch (Exception $e) {
+            return redirect()->route('article.list')->withErrors($e);
+        }
     }
 }
