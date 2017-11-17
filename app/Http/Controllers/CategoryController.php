@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 //additional includes
-use App\Category;
+use App\Repositories\CategoryRepository;
 use Auth;
 use Exception;
 use Response;
@@ -15,26 +15,34 @@ use View;
 
 class CategoryController extends Controller
 {
+
+    public function __construct(CategoryRepository $category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @param none
+     *
+     * @return \views
+     */
     public function index()
     {
         $formData               = [];
-        $formData['categories'] = Category::select(['id', 'name'])
-                                          ->orderBy('name')
-                                          ->paginate(5);
+        $formData['categories'] = $this->category->getAll();
 
         return View::make('category.list', $formData);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function store(Request $request)
     {
         try {
-            $userId = Auth::user()->id;
-            $Category = new Category;
-
-            $Category->name            = $request->name;
-            $Category->updated_user_id = $userId;
-
-            $Category->save();
+            $this->category->store($request);
 
             return redirect()->route('category.list')->with(['categoryAddMessage' => true, 'message' => 'Category added.']);
         } catch (Excception $e) {
@@ -42,10 +50,15 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function destroy(Request $request)
     {
         try{
-            Category::destroy($request->id);
+            $this->category->destroy($request->id);
 
             return Response::json(['success' => true, 'message' => 'Category deleted.']);
         } catch(Exception $e) {
