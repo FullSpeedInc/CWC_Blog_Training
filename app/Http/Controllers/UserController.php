@@ -39,6 +39,19 @@ class UserController extends Controller
      *
      * @return \views
      */
+    public function logout()
+    {
+        Auth::logout();
+
+        return View::make('user/login');
+    }
+
+
+    /**
+     * @param none
+     *
+     * @return \views
+     */
     public function index()
     {
         $formData                  = [];

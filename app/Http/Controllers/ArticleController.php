@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 //additional includes
-use App\Article;
 use App\Repositories\ArticleRepository;
 use App\User;
 use Auth;
@@ -82,7 +81,6 @@ class ArticleController extends Controller
         $formData['categories'] = Category::all(['id', 'name as value']);
 
         return View::make('article.edit', $formData);
-
     }
 
     /**

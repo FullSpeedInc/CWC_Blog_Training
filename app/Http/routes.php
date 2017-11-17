@@ -58,6 +58,10 @@ Route::group(['prefix' => 'user'], function () {
         'as'   => 'login',
         'uses' => 'UserController@login'
     ]);
+    Route::get('logout', [
+        'as'   => 'logout',
+        'uses' => 'UserController@logout'
+    ]);
     Route::get('list', [
         'as'         => 'user.list',
         'uses'       => 'UserController@index',

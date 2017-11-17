@@ -6,7 +6,7 @@
 </head>
 <body>
     @if (strpos(Request::path(),'/') === 0 ||strpos(Request::path(),'login') === 0 ||
-          strpos(Request::path(),'logout') === 0)
+          strpos(Request::path(),'user/logout') === 0)
     @else
         @include("layout.nav")
     @endif
