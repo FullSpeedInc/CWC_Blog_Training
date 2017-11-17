@@ -56,13 +56,13 @@ class UserTest extends TestCase
 
         $this->actingAs($user)
              ->visit('/user/list')
-             ->type('test2', 'username')
+             ->type('test211', 'username')
              ->type('test2', 'firstname')
              ->type('test2', 'lastname')
              ->select('0', 'role')
              ->type('password', 'password')
              ->press('Submit')
-             ->seePageIs('/user/list')
+             ->visit('/user/list')
              ->see('User added');
 
         $this->assertResponseOk(true);

@@ -7,15 +7,24 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 //additional includes
-use App\User;
+use App\Repositories\UserRepository;
 use Auth;
 use Exception;
-use Hash;
 use Response;
 use View;
 
 class UserController extends Controller
 {
+    public function __construct(UserRepository $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function login(Request $request)
     {
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
@@ -25,13 +34,15 @@ class UserController extends Controller
         return back()->withErrors('Invalid login.');
     }
 
-
+    /**
+     * @param none
+     *
+     * @return \views
+     */
     public function index()
     {
         $formData                  = [];
-        $formData['users']         = User::select(['id', 'first_name as firstname', 'last_name as lastname', 'username'])
-                                         ->orderBy('firstname')
-                                         ->paginate(5);
+        $formData['users']         = $this->user->getAllUsers();
         $formData['viewUserStore'] = false;
 
         if (Auth::user()->role == 1) {
@@ -41,18 +52,15 @@ class UserController extends Controller
         return View::make('user.list', $formData);
     }
 
+    /**
+     * @param StoreUserRequest $request
+     *
+     * @return \views
+     */
     public function store(Requests\StoreUserRequest $request)
     {
         try {
-            $User = new User;
-
-            $User->first_name = $request->firstname;
-            $User->last_name  = $request->lastname;
-            $User->password   = Hash::make($request->password);
-            $User->role       = $request->role;
-            $User->username   = $request->username;
-
-            $User->save();
+            $this->user->store($request);
 
             return redirect()->route('user.list')->with(['userAddMessage' => true, 'message' => 'User added.']);
         } catch (Excception $e) {
@@ -60,10 +68,15 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function destroy(Request $request)
     {
         try{
-            User::destroy($request->id);
+            $this->user->destroy($request->id);
 
             return Response::json(['success' => true, 'message' => 'User deleted.']);
         } catch(Exception $e) {
@@ -71,23 +84,26 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @param UpdateUserRequest $request
+     *
+     * @return \views
+     */
     public function update(Requests\UpdateUserRequest $request)
     {
-        $user = User::find($request->id);
-
-        $user->first_name = $request->firstname;
-        $user->last_name  = $request->lastname;
-        $user->role       = $request->role;
-        $user->username   = $request->username;
-
-        $user->save();
+        $this->user->update($request);
 
         return redirect()->route('user.list')->with(['userListMessage' => true, 'message' => 'User updated.']);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function get(Request $request)
     {
-        $user = User::find($request->id);
+        $user = $this->user->getUserById($request->id);
 
         return Response::json(['success' => true, 'message' => 'User detail retrieved.', 'user' => $user]);
     }
