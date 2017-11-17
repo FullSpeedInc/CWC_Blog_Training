@@ -9,6 +9,7 @@ use App\Http\Requests;
 
 //additional includes
 use App\Article;
+use App\Repositories\ArticleRepository;
 use App\User;
 use Auth;
 use Response;
@@ -16,13 +17,23 @@ use View;
 
 class ArticleController extends Controller
 {
+    public function __construct(ArticleRepository $article)
+    {
+        $this->article = $article;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function index(Request $request)
     {
         $formData                  = [];
         $user                      = new User;
         $formData['currentPage']   = ($request->page? $request->page: 1);
         $paginatorLenght           = 5;
-        $articles                  = $user->getArticles();
+        $articles                  = $this->article->getUserArticles();
         $articleSize               = sizeof($articles);
         $formData['articles']      = $articles->forPage($formData['currentPage'], $paginatorLenght);
         $formData['paginatorLast'] = ceil($articleSize/$paginatorLenght);
@@ -30,18 +41,28 @@ class ArticleController extends Controller
         return View::make('article.list', $formData);
     }
 
+    /**
+     * @param none
+     *
+     * @return \views
+     */
     public function create()
     {
-        $formData['categories'] = Category::all(['id', 'name as value']);
+        $formData['categories'] = $this->article->getAll();
 
         return View::make('article.create', $formData);
 
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function destroy(Request $request)
     {
         try{
-            Article::destroy($request->id);
+            $this->article->destroy($request->id);
 
             return Response::json(['success' => true, 'message' => 'Article deleted.']);
         } catch(Exception $e) {
@@ -49,29 +70,30 @@ class ArticleController extends Controller
         }
     }
 
+    /**
+     * @param int $id
+     *
+     * @return \views
+     */
     public function edit($id = null)
     {
         $formData               = [];
-        $formData['article']    = Article::find($id);
+        $formData['article']    = $this->article->getArticleById($id);
         $formData['categories'] = Category::all(['id', 'name as value']);
 
         return View::make('article.edit', $formData);
 
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function store(Request $request)
     {
         try{
-            $Article = new Article;
-
-            $Article->article_category_id  = $request->category;
-            $Article->contents             = $request->editor;
-            $Article->image_path           = ($request->imgInput? $request->imgInput : null);
-            $Article->slug                 = $request->slug;
-            $Article->title                = $request->title;
-            $Article->updated_user_id      = Auth::user()->id;
-
-            $Article->save();
+            $this->article->store($request);
 
             return redirect()->route('article.list')->with(['articleAddMessage' => true, 'message' => 'Article added.']);
         } catch (Exception $e) {
@@ -79,18 +101,15 @@ class ArticleController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \views
+     */
     public function update(Request $request)
     {
         try{
-            $Article = Article::find($request->id);
-
-            $Article->article_category_id  = $request->category;
-            $Article->contents             = $request->editor;
-            $Article->image_path           = ($request->imgInput? $request->imgInput : null);
-            $Article->slug                 = $request->slug;
-            $Article->title                = $request->title;
-
-            $Article->save();
+            $this->article->update($request);
 
             return redirect()->route('article.list')->with(['articleAddMessage' => true, 'message' => 'Article updated.']);
         } catch (Exception $e) {
