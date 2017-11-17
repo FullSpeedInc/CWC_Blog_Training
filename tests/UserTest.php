@@ -4,6 +4,9 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+//additional includes
+use App\User;
+
 class UserTest extends TestCase
 {
     use WithoutMiddleware;
@@ -53,8 +56,7 @@ class UserTest extends TestCase
     public function testSuccessfulRegistration()
     {
         $username = Str_random(10);
-
-        $user = factory(App\User::class, 'admin')->make();
+        $user     = factory(App\User::class, 'admin')->make();
 
         $this->actingAs($user)
              ->visit('/user/list')
@@ -77,11 +79,12 @@ class UserTest extends TestCase
      */
     public function testUnsuccessfulRegistration()
     {
-        $user = factory(App\User::class, 'admin')->make();
+        $user          = factory(App\User::class, 'admin')->make();
+        $userAvailable = User::where(['role' => 0])->first();
 
         $this->actingAs($user)
             ->visit('/user/list')
-            ->type('test2', 'username')
+            ->type($userAvailable->username, 'username')
             ->type('test2', 'firstname')
             ->type('test2', 'lastname')
             ->select('0', 'role')
@@ -99,28 +102,29 @@ class UserTest extends TestCase
      */
     public function testSuccessfulUpdate()
     {
-        $user = factory(App\User::class, 'admin')->make();
+        $userEdit = User::where(['role' => 0])->first();
 
-        $this->actingAs($user)
-            ->visit('/user/list')
-            ->type('test2', 'username')
-            ->type('test2', 'firstname')
-            ->type('test2', 'lastname')
-            ->select('0', 'role')
-            ->type('password', 'password')
-            ->press('Submit')
-            ->dontSee('User added');
+        $response = $this->call('POST',
+                                '/user/update',
+                                [
+                                    'id'        => $userEdit->id,
+                                    'firstname' => Str_random(10),
+                                    'lastname'  => Str_random(10),
+                                    'role'      => 0
 
-        $this->assertResponseOk(true);
+                                ]);
+
+        $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testUserDeletion()
     {
         $user = factory(App\User::class, 'admin')->make();
+        $userEdit = User::where(['role' => 0])->first();
 
         $this->actingAs($user)
             ->visit('/user/list')
-            ->post('/user/delete', ['id' => '9'])
+            ->post('/user/delete', ['id' => $userEdit->id])
             ->seeJson([
                 'success' => true
             ]);

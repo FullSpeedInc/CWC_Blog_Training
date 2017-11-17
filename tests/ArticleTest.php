@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+use App\Article;
+
 class ArticleTest extends TestCase
 {
     use WithoutMiddleware;
@@ -15,6 +17,8 @@ class ArticleTest extends TestCase
      */
     public function testArticleCreation()
     {
+        $data = Str_random(10);
+
         $this->visit('/')
             ->see('Username')
             ->see('Password')
@@ -23,8 +27,8 @@ class ArticleTest extends TestCase
             ->press('Submit')
             ->visit('/article/list')
             ->visit('/article/create')
-            ->type('admin', 'title')
-            ->type('password', 'slug')
+            ->type($data, 'title')
+            ->type($data, 'slug')
             ->select('1', 'category')
             ->press('Save');
 
@@ -33,11 +37,12 @@ class ArticleTest extends TestCase
 
     public function testArticleDeletion()
     {
-        $user = factory(App\User::class, 'admin')->make();
+        $user          = factory(App\User::class, 'admin')->make();
+        $articleDelete = Article::first();
 
         $this->actingAs($user)
             ->visit('/article/list')
-            ->post('/article/delete', ['id' => '5'])
+            ->post('/article/delete', ['id' => $articleDelete->id])
             ->seeJson([
                 'success' => true
             ]);
@@ -47,10 +52,11 @@ class ArticleTest extends TestCase
 
     public function testArticleUpdate()
     {
-        $user = factory(App\User::class, 'admin')->make();
+        $user          = factory(App\User::class, 'admin')->make();
+        $articleUpdate = Article::first();
 
         $this->actingAs($user)
-            ->visit('/article/edit/1')
+            ->visit('/article/edit/' . $articleUpdate->id)
             ->type('titleUnit', 'title')
             ->type('slugUnit', 'slug')
             ->select('1', 'category')

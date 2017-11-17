@@ -22,7 +22,7 @@ class CategoryTest extends TestCase
             ->type('password', 'password')
             ->press('Submit')
             ->visit('/category/list')
-            ->type('somecategory', 'name')
+            ->type(Str_random(10), 'name')
             ->press('Submit')
             ->visit('/category/list')
             ->see('Category added');
