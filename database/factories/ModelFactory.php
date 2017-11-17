@@ -13,7 +13,7 @@
 
 $factory->defineAs(App\User::class, 'admin', function (Faker\Generator $faker) {
     return [
-        'username'       => 'admin1',
+        'username'       => 'admin',
         'password'       => bcrypt(str_random(10)),
         'remember_token' => str_random(10),
         'role' => 1

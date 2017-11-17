@@ -18,11 +18,11 @@
 
                     <table id="tblCategory" class="table table-hover table-sm">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
                         @if($categories)
