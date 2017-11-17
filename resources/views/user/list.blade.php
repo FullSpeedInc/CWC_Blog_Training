@@ -45,10 +45,10 @@
                     </table>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-2 offset-md-10">
-                    <nav>{{$users->links()}}</nav>
-                </div>
+            <div class="row d-flex justify-content-between">
+                <div></div>
+                <div>{{$users->links()}}</div>
+                <div></div>
             </div>
         </div>
         @if ($viewUserStore)

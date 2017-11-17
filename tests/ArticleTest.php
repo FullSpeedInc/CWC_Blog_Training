@@ -30,4 +30,35 @@ class ArticleTest extends TestCase
 
         $this->assertResponseOk(true);
     }
+
+    public function testArticleDeletion()
+    {
+        $user = factory(App\User::class, 'admin')->make();
+
+        $this->actingAs($user)
+            ->visit('/article/list')
+            ->post('/article/delete', ['id' => '5'])
+            ->seeJson([
+                'success' => true
+            ]);
+
+        $this->assertResponseOk(true);
+    }
+
+    public function testArticleUpdate()
+    {
+        $user = factory(App\User::class, 'admin')->make();
+
+        $this->actingAs($user)
+            ->visit('/article/edit/1')
+            ->type('titleUnit', 'title')
+            ->type('slugUnit', 'slug')
+            ->select('1', 'category')
+            ->type('editorSlug', 'editor')
+            ->press('Update')
+            ->seePageIs('article/list')
+            ->see('Article updated');
+
+        $this->assertResponseOk(true);
+    }
 }

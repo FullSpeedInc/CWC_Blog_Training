@@ -22,7 +22,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param none
      *
      * @return \views
      */
@@ -58,9 +57,11 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $this->category->destroy($request->id);
+            if ($this->category->destroy($request->id)) {
+                return Response::json(['success' => true, 'message' => 'Category deleted.']);
+            }
 
-            return Response::json(['success' => true, 'message' => 'Category deleted.']);
+            return Response::json(['success' => false, 'message' => 'Category cannot be deleted.']);
         } catch(Exception $e) {
             return Response::json(['success' => false, 'message' => $e]);
         }

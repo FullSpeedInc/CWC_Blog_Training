@@ -9,7 +9,6 @@ use App\Http\Requests;
 
 //additional includes
 use App\Repositories\ArticleRepository;
-use App\User;
 use Auth;
 use Response;
 use View;
@@ -29,7 +28,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $formData                  = [];
-        $user                      = new User;
+        $formData['categories'] = $this->article->getAllCategories();
         $formData['currentPage']   = ($request->page? $request->page: 1);
         $paginatorLenght           = 5;
         $articles                  = $this->article->getUserArticles();
@@ -47,7 +46,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        $formData['categories'] = $this->article->getAll();
+        $formData['categories'] = $this->article->getAllCategories();
 
         return View::make('article.create', $formData);
 
@@ -109,7 +108,7 @@ class ArticleController extends Controller
         try{
             $this->article->update($request);
 
-            return redirect()->route('article.list')->with(['articleAddMessage' => true, 'message' => 'Article updated.']);
+            return redirect()->route('article.list')->with(['articleListMessage' => true, 'message' => 'Article updated.']);
         } catch (Exception $e) {
             return redirect()->route('article.list')->withErrors($e);
         }

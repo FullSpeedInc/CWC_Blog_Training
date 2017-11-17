@@ -16,39 +16,43 @@
                         </div>
                     @endif
 
-                    <table id="tblCategory" class="table table-hover table-sm">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @if($categories)
-                            @foreach($categories as $category)
+                    <form>
+                        <table id="tblCategory" class="table table-hover table-sm">
+                            <thead>
                                 <tr>
-                                    <td scope="row">{{$category->id}}</td>
-                                    <td>{{$category->name}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm btnCategoryDelete" id="{{$category->id}}">Delete</button>
-                                    </td>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        @else
-                            <tr><td>No Categories.</td></tr>
-                        @endif
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @if($categories)
+                                @foreach($categories as $category)
+                                    <tr>
+                                        <td scope="row">{{$category->id}}</td>
+                                        <td>{{$category->name}}</td>
+                                        <td>
+                                            <a class="btnCategoryDelete" name="deleteArticle{{$category->id}}" id="{{$category->id}}">
+                                                <button type="button" class="btn btn-danger btn-sm" id="{{$category->id}}" value="Delete">Delete</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr><td>No Categories.</td></tr>
+                            @endif
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-2 offset-md-10">
-                    <nav>{{$categories->links()}}</nav>
-                </div>
+            <div class="row d-flex justify-content-between">
+                <div></div>
+                <div>{{$categories->links()}}</div>
+                <div></div>
             </div>
         </div>
-        <div class="col-2 align-self-end">
+        <div class="col-2">
                 <form action="{{route('category.store')}}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -91,6 +95,9 @@
                             notifications.category.success.css('display', 'block')
                             notifications.category.success.html(data.message)
                             $('#tblCategory #' + id).closest('tr').remove()
+                        } else {
+                            notifications.category.danger.css('display', 'block')
+                            notifications.category.danger.html(data.message)
                         }
                     },
                     error: function(){

@@ -50,7 +50,7 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    /*public function testSuccessfulRegistration()
+    public function testSuccessfulRegistration()
     {
         $user = factory(App\User::class, 'admin')->make();
 
@@ -66,7 +66,7 @@ class UserTest extends TestCase
              ->see('User added');
 
         $this->assertResponseOk(true);
-    }*/
+    }
 
     /**
      * Test unsuccessful user registration
@@ -108,6 +108,20 @@ class UserTest extends TestCase
             ->type('password', 'password')
             ->press('Submit')
             ->dontSee('User added');
+
+        $this->assertResponseOk(true);
+    }
+
+    public function testUserDeletion()
+    {
+        $user = factory(App\User::class, 'admin')->make();
+
+        $this->actingAs($user)
+            ->visit('/user/list')
+            ->post('/user/delete', ['id' => '9'])
+            ->seeJson([
+                'success' => true
+            ]);
 
         $this->assertResponseOk(true);
     }

@@ -29,4 +29,21 @@ class CategoryTest extends TestCase
 
         $this->assertResponseOk(true);
     }
+
+    public function testCategoryDeletion()
+    {
+        $this->visit('/')
+            ->see('Username')
+            ->see('Password')
+            ->type('admin', 'username')
+            ->type('password', 'password')
+            ->press('Submit')
+            ->visit('/category/list')
+            ->post('/category/delete', ['id' => '17'])
+            ->seeJson([
+                'success' => true
+            ]);
+
+        $this->assertResponseOk(true);
+    }
 }

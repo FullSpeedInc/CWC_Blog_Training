@@ -28,9 +28,18 @@
                     <textarea name="editor">{{$article->contents}}</textarea>
                 </div>
 
-                <input name="imgInput" type="text" style="width:60%">
-                <button type="button" name="imgUpload" class="btn btn-primary" style="float: left">Choose Image</button>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <div class="form-group">
+                    <img class="responsive-img" src="{{ asset($article->image_path) }}" style="max-width: 60%;">
+                </div>
+
+                <div class="form-group">
+                    <input name="imgInput" type="text" style="width:60%">
+                    <button type="button" name="imgUpload" class="btn btn-primary" style="float: left">Choose Image</button>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
             </form>
         </div>
     </div>

@@ -4,16 +4,34 @@ namespace App\Repositories;
 
 
 //additional includes
+use App\Article;
 use App\Category;
 use Auth;
 
 class CategoryRepository {
 
+    /**
+     * Soft deletes the category by id.
+     *
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function destroy($id)
     {
+        if (Article::where(['article_category_id' => $id, 'deleted_at' => null])->count())
+        {
+            return false;
+        }
+
         return Category::destroy($id);
     }
 
+    /**
+     * Gets all categories
+     *
+     * @return pagination
+     */
     public function getAll()
     {
         return Category::select(['id', 'name'])
@@ -21,14 +39,19 @@ class CategoryRepository {
                          ->paginate(5);
     }
 
+    /**
+     * Saves new category.
+     *
+     * @return boolean
+     */
     public function store($request)
     {
         $userId                    = Auth::user()->id;
-        $Category                  = new Category;
-        $Category->name            = $request->name;
-        $Category->updated_user_id = $userId;
+        $category                  = new Category;
+        $category->name            = $request->name;
+        $category->updated_user_id = $userId;
 
-        $Category->save();
+        $category->save();
 
         return true;
     }

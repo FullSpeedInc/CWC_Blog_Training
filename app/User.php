@@ -46,8 +46,9 @@ class User extends Authenticatable
                 return $this->find(Auth::user()->id)
                             ->articles()
                             ->join('users', 'users.id', '=', 'articles.updated_user_id')
+                            ->join('article_category', 'article_category.id', '=', 'articles.article_category_id')
                             ->get(['users.id as user_id', 'users.username', 'articles.title', 'articles.slug',
-                                'articles.contents', 'articles.id as article_id']);
+                                'articles.contents', 'articles.id as article_id', 'article_category.name as category']);
         }
     }
 }

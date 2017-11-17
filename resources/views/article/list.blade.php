@@ -2,7 +2,7 @@
 @section('sitetitle', 'Category')
 @section("content")
     <div class="row">
-        <div class="col">
+        <div class="col-7">
             <div class="row">
                 <div class="offset-md-1 col-10">
                     <div id="notificationArticleSuccess" class="alert alert-success" style="display:none;"></div>
@@ -15,8 +15,6 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-
-                    <a href="{{route('article.create')}}">Create Article</a>
 
                     <table id="tblArticle" class="table table-hover table-sm">
                         <thead>
@@ -37,7 +35,7 @@
                                     <td>{{$article->slug}}</td>
                                     <td>{{$article->username}}</td>
                                     <td>
-                                        <a href="{{route('article.edit', $article->article_id)}}">Edit</a>
+                                        <a class="btn btn-primary btn-sm" href="{{route('article.edit', $article->article_id)}}">Edit</a>
                                         <button type="button" class="btn btn-danger btn-sm btnArticleDelete" id="{{$article->article_id}}">Delete</button>
                                     </td>
                                 </tr>
@@ -49,24 +47,61 @@
                     </table>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-2 offset-md-10">
-                    <nav>
-                        <ul class="pagination">
-                            @if($currentPage>1)
-                                <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage-1}}">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage-1}}">{{$currentPage-1}}</a></li>
-                            @endif
-                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage}}">{{$currentPage}}</a></li>
-                            @if($currentPage+1 <= $paginatorLast)
-                                <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage+1}}">{{$currentPage+1}}</a></li>
-                                    <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage+1}}">Next</a></li>
-                            @endif
-                        </ul>
-                    </nav>
+            <div class="row d-flex justify-content-between">
+                <div></div>
+                <div>
+                    <ul class="pagination">
+                        @if($currentPage>1)
+                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage-1}}">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage-1}}">{{$currentPage-1}}</a></li>
+                        @endif
+                        <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage}}">{{$currentPage}}</a></li>
+                        @if($currentPage+1 <= $paginatorLast)
+                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage+1}}">{{$currentPage+1}}</a></li>
+                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage+1}}">Next</a></li>
+                        @endif
+                    </ul>
+
                 </div>
+                <div></div>
             </div>
 
+        </div>
+        <div class="col-5">
+            <div class="row">
+                <form action="{{route('article.store')}}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="Enter title." maxlength="255" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="slug">Slug</label>
+                        <input type="text" name="slug" class="form-control" placeholder="Enter slug." maxlength="255" pattern="[a-zA-Z0-9._-]+" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select class="form-control" name="category">
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}" selected>{{$category->value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea name="editor"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input name="imgInput" type="text" style="width:60%">
+                        <button type="button" name="imgUpload" class="btn btn-primary" style="float: left">Choose Image</button>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <script>
@@ -102,6 +137,31 @@
             $('table').on('click', '.btnArticleDelete', function(){
                 userDelete($(this).attr('id'))
             })
+
+
+            //For the CKEditor
+            var editor = ClassicEditor.create( document.querySelector( '[name=editor]' ) )
+                                    .then( editor => { console.log( editor );
+                                    }).catch( error => { console.error( error );
+                                    })
+
+            $('[name=imgUpload]').click( () => {
+                CKFinder.modal( {
+                    chooseFiles: true,
+                    width: 800,
+                    height: 600,
+                    onInit: function( finder ) {
+                        finder.on( 'files:choose', function( evt ) {
+                            var file = evt.data.files.first();
+                            $('[name=imgInput]').val(file.getUrl());
+                        } );
+
+                        finder.on( 'file:choose:resizedImage', function( evt ) {
+                            $('[name=imgInput]').val(evt.data.resizedUrl);
+                        } );
+                    }
+                });
+            });
         })
     </script>
 @stop
