@@ -19,6 +19,7 @@
                     <table id="tblArticle" class="table table-hover table-sm">
                         <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Title</th>
                             <th>Category</th>
                             <th>Slug</th>
@@ -30,6 +31,7 @@
                         @if($articles)
                             @foreach($articles as $article)
                                 <tr>
+                                    <td>{{$article->article_id}}</td>
                                     <td>{{$article->title}}</td>
                                     <td>{{$article->category}}</td>
                                     <td>{{$article->slug}}</td>
