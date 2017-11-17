@@ -109,10 +109,6 @@
                                 <input type="hidden" name="id" value="">
 
                                 <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" name="username" class="form-control" placeholder="Enter username." required>
-                                </div>
-                                <div class="form-group">
                                     <label for="lastname">Last Name</label>
                                     <input type="text" name="lastname" class="form-control" placeholder="Enter last name." required>
                                 </div>

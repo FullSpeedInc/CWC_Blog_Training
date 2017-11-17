@@ -24,7 +24,6 @@ class UpdateUserRequest extends Request
     public function rules()
     {
         return [
-            'username'  => 'required|unique:users',
             'lastname'  => 'required',
             'firstname' => 'required',
             'role'      => 'required'
