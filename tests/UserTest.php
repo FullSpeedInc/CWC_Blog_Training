@@ -52,13 +52,15 @@ class UserTest extends TestCase
      */
     public function testSuccessfulRegistration()
     {
+        $username = Str_random(10);
+
         $user = factory(App\User::class, 'admin')->make();
 
         $this->actingAs($user)
              ->visit('/user/list')
-             ->type('test211', 'username')
-             ->type('test2', 'firstname')
-             ->type('test2', 'lastname')
+             ->type($username, 'username')
+             ->type('first name', 'firstname')
+             ->type('last name', 'lastname')
              ->select('0', 'role')
              ->type('password', 'password')
              ->press('Submit')

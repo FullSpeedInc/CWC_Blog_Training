@@ -32,6 +32,11 @@ class CategoryTest extends TestCase
 
     public function testCategoryDeletion()
     {
+        $id = DB::table('article_category')
+                  ->insertGetId(
+                                  array('name' => Str_random(10), 'updated_user_id' => 1)
+                               );
+
         $this->visit('/')
             ->see('Username')
             ->see('Password')
@@ -39,7 +44,7 @@ class CategoryTest extends TestCase
             ->type('password', 'password')
             ->press('Submit')
             ->visit('/category/list')
-            ->post('/category/delete', ['id' => '17'])
+            ->post('/category/delete', ['id' => $id])
             ->seeJson([
                 'success' => true
             ]);
