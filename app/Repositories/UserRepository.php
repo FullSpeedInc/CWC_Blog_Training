@@ -59,7 +59,6 @@ class UserRepository {
         $user->first_name = $request->firstname;
         $user->last_name  = $request->lastname;
         $user->role       = $request->role;
-        $user->username   = $request->username;
 
         $user->save();
 

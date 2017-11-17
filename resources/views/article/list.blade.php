@@ -51,20 +51,7 @@
             </div>
             <div class="row d-flex justify-content-between">
                 <div></div>
-                <div>
-                    <ul class="pagination">
-                        @if($currentPage>1)
-                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage-1}}">Previous</a></li>
-                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage-1}}">{{$currentPage-1}}</a></li>
-                        @endif
-                        <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage}}">{{$currentPage}}</a></li>
-                        @if($currentPage+1 <= $paginatorLast)
-                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage+1}}">{{$currentPage+1}}</a></li>
-                            <li class="page-item"><a class="page-link" href="{{url()->current()}}?page={{$currentPage+1}}">Next</a></li>
-                        @endif
-                    </ul>
-
-                </div>
+                <div>{{$articles->links()}}</div>
                 <div></div>
             </div>
 

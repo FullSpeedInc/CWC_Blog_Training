@@ -27,14 +27,10 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $formData                  = [];
-        $formData['categories'] = $this->article->getAllCategories();
-        $formData['currentPage']   = ($request->page? $request->page: 1);
-        $paginatorLenght           = 5;
-        $articles                  = $this->article->getUserArticles();
-        $articleSize               = sizeof($articles);
-        $formData['articles']      = $articles->forPage($formData['currentPage'], $paginatorLenght);
-        $formData['paginatorLast'] = ceil($articleSize/$paginatorLenght);
+        $formData                = [];
+        $formData['categories']  = $this->article->getAllCategories();
+        $formData['currentPage'] = ($request->page? $request->page: 1);
+        $formData['articles']    = $this->article->getUserArticles();
 
         return View::make('article.list', $formData);
     }
@@ -49,7 +45,6 @@ class ArticleController extends Controller
         $formData['categories'] = $this->article->getAllCategories();
 
         return View::make('article.create', $formData);
-
     }
 
     /**

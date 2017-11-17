@@ -38,17 +38,19 @@ class User extends Authenticatable
             case 1:
                 return Article::join('article_category', 'article_category.id', '=', 'articles.article_category_id')
                                 ->join('users', 'users.id', '=', 'articles.updated_user_id')
-                                ->get(['users.id as user_id', 'users.username', 'articles.title',
+                                ->select('users.id as user_id', 'users.username', 'articles.title',
                                     'articles.slug', 'articles.contents', 'articles.id as article_id',
-                                    'article_category.name as category']);
+                                    'article_category.name as category')
+                                ->paginate(5);
                 break;
             default:
                 return $this->find(Auth::user()->id)
                             ->articles()
                             ->join('users', 'users.id', '=', 'articles.updated_user_id')
                             ->join('article_category', 'article_category.id', '=', 'articles.article_category_id')
-                            ->get(['users.id as user_id', 'users.username', 'articles.title', 'articles.slug',
-                                'articles.contents', 'articles.id as article_id', 'article_category.name as category']);
+                            ->select('users.id as user_id', 'users.username', 'articles.title', 'articles.slug',
+                                'articles.contents', 'articles.id as article_id', 'article_category.name as category')
+                            ->paginate(5);
         }
     }
 }
